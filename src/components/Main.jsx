@@ -1,39 +1,45 @@
-import { useState } from "react";
+import React from "react"
+import ClaudeRecipe from "./ClaudeRecipe"
+import IngredientsList from "./IngredientsList"
 
-function Main() {
-    const [ingredients, setNewIngredient] = useState([]);
 
-    const ingredientsList = ingredients.map((ingredient, index) => {
-        return <li key={index}>{ingredient}</li>
-    })
+export default function Main() {
 
-    function submitHandler(event) {
+    const [ingredients, setIngredients] = React.useState([])
+    const [recipeShown, setRecipeShown] = React.useState(false)
+
+    function addIngredient(event) {
         event.preventDefault();
-        console.log('submitting form');
-        const form = new FormData(event.target);
-        let newIngredient = form.get('ingredient');
-        setNewIngredient(prevIngredients => [
-            ...prevIngredients,
-            newIngredient]);
+        const formData = new FormData(event.target);
+        const newIngredient = formData.get("ingredient");
+        setIngredients(prevIngredients => [...prevIngredients, newIngredient]);
+        event.target.reset();
+    }
+
+    function getRecipe() {
+        setRecipeShown(true);
     }
 
     return (
         <main>
-            <form action="" onSubmit={submitHandler} className="recipe-form">
-                <input type="text"
-                    placeholder="e.g. 1 cup of flour"
+            <form onSubmit={addIngredient} className="add-ingredient-form">
+                <input
+                    type="text"
+                    placeholder="e.g. oregano"
                     aria-label="Add ingredient"
                     name="ingredient"
+                    required
+                    autoComplete="off"
+                    autoFocus
                 />
-
-                <button type="submit">Add Ingredient</button>
+                <button>Add ingredient</button>
             </form>
-            <ol>
-                {ingredientsList}
-            </ol>
-
+            {ingredients.length > 0 &&
+                <IngredientsList ingredientsList={ingredients} recipeShown={recipeShown} handleRecipe={getRecipe}></IngredientsList>
+            }
+            {recipeShown &&
+                <ClaudeRecipe ></ClaudeRecipe>
+            }
         </main>
     )
 }
-
-export default Main;
