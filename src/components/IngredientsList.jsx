@@ -25,7 +25,7 @@ export default function IngredientsList(props) {
                         <p>The chef has created a recipe for you. Enjoy cooking!</p>
                     </div>
                     <div>
-                        <button onClick={() => props.handleRecipe()}>Get another recipe</button>
+                        <button style={{opacity: '0.5'}}>Get a recipe</button>
                     </div>
                 </div>
             }

@@ -1,12 +1,13 @@
 import React from "react"
 import ClaudeRecipe from "./ClaudeRecipe"
 import IngredientsList from "./IngredientsList"
-
+import { getRecipeFromMistral } from "../../ai"
 
 export default function Main() {
 
     const [ingredients, setIngredients] = React.useState([])
     const [recipeShown, setRecipeShown] = React.useState(false)
+    const [aiRecipe, setRecipe] = React.useState('');
 
     function addIngredient(event) {
         event.preventDefault();
@@ -16,8 +17,10 @@ export default function Main() {
         event.target.reset();
     }
 
-    function getRecipe() {
+    async function getRecipe() {
         setRecipeShown(true);
+        const result = await getRecipeFromMistral(ingredients);
+        setRecipe(result)
     }
 
     return (
@@ -37,8 +40,8 @@ export default function Main() {
             {ingredients.length > 0 &&
                 <IngredientsList ingredientsList={ingredients} recipeShown={recipeShown} handleRecipe={getRecipe}></IngredientsList>
             }
-            {recipeShown &&
-                <ClaudeRecipe ></ClaudeRecipe>
+            {aiRecipe &&
+                <ClaudeRecipe recipe={aiRecipe}></ClaudeRecipe>
             }
         </main>
     )
