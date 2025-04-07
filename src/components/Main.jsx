@@ -6,7 +6,7 @@ import { getRecipeFromMistral } from "../../ai"
 export default function Main() {
 
     const [ingredients, setIngredients] = React.useState([])
-    const [recipeShown, setRecipeShown] = React.useState(false)
+    const [recipeShown, setRecipeShown] = React.useState('Pending')
     const [aiRecipe, setRecipe] = React.useState('');
 
     function addIngredient(event) {
@@ -15,12 +15,14 @@ export default function Main() {
         const newIngredient = formData.get("ingredient");
         setIngredients(prevIngredients => [...prevIngredients, newIngredient]);
         event.target.reset();
+        recipeShown === 'Generated' ? setRecipeShown('Pending') : null;
     }
 
     async function getRecipe() {
-        setRecipeShown(true);
+        setRecipeShown('Generating')
         const result = await getRecipeFromMistral(ingredients);
         setRecipe(result)
+        setRecipeShown('Generated');
     }
 
     return (

@@ -1,31 +1,39 @@
 export default function IngredientsList(props) {
     const ingredients = props.ingredientsList;
     const recipeShown = props.recipeShown;
-    const ingredientsListItems = ingredients.map(ingredient => (
-        <li key={ingredient}>{ingredient}</li>
+    const ingredientsListItems = ingredients.map((ingredient, index) => (
+        <li key={ingredient}>{ingredient} </li>
     ))
 
     return (
         <section>
-            <h2>Ingredients on hand:</h2>
+            <h2>Ingredients Available:</h2>
             <ul className="ingredients-list" aria-live="polite">{ingredientsListItems}</ul>
-            {(ingredients.length >= 4 && !recipeShown) &&
+            {recipeShown === 'Pending' && ingredients.length >= 4 &&
                 <div className="get-recipe-container">
                     <div>
-                        <h3>Ready for a recipe?</h3>
-                        <p>Generate a recipe from your list of ingredients.</p>
+                        <h3>Ready to Cook?</h3>
+                        <p>Click below to generate a recipe using your ingredients.</p>
                     </div>
-                    <button onClick={() => props.handleRecipe()}>Get a recipe</button>
+                    <button type="button" onClick={props.handleRecipe}>Generate Recipe</button>
                 </div>
             }
-            {recipeShown &&
+            {recipeShown === 'Generating' &&
                 <div className="get-recipe-container">
                     <div>
-                        <h3>Recipe generated!</h3>
-                        <p>The chef has created a recipe for you. Enjoy cooking!</p>
+                        <h3>Creating Your Recipe...</h3>
+                        <p>Hold tight! The chef is preparing something special for you.</p>
+                    </div>
+                </div>
+            }
+            {recipeShown === 'Generated' &&
+                <div className="get-recipe-container">
+                    <div>
+                        <h3>Recipe Ready!</h3>
+                        <p>Your recipe is ready! Enjoy cooking with Chef Claude's creation.</p>
                     </div>
                     <div>
-                        <button style={{opacity: '0.5'}}>Get a recipe</button>
+                        <button style={{ opacity: '0.5' }} disabled>Generate Recipe</button>
                     </div>
                 </div>
             }
